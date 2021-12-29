@@ -15,7 +15,7 @@ function update_preview_images()
 function update_preview(attr_name, attr_val)
 {
     const epoch_date = new Date(2147483647 * 1000);
-    Cookies.set(attr_name, attr_val)//todo use cookie expiration
+    Cookies.set(attr_name, attr_val, {expires: epoch_date})
 //    $("#preview-info").attr(attr_name,attr_val);
     update_preview_images();
 }
