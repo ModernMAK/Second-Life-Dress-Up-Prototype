@@ -9,11 +9,12 @@
 # 12:06 => 1:12 ~ 66
 # 1:30 => 1:45 ~ 15
 
-# 3:16 => 3:56 ~ 40 (JS to select update previews)
-# 6:01 => 6:13 ~ 12 (Cookies)
-# 6:13 => 6:22 ~ Layout
-# 6:28 => 7:02 ~ Borders + Scrolling
-# 7:09 =>
+# 3:16 => 3:56 ~ 40 ~ (JS to select update previews)
+# 6:01 => 6:13 ~ 12 ~ (Cookies)
+# 6:13 => 6:22 ~ 11 ~ Layout
+# 6:28 => 7:02 ~ 34 ~ Borders + Scrolling
+# 7:09 => 8:12 ~ 63 ~ Code Review
+# 313 / 60 ~ $200
 from http import HTTPStatus
 from typing import Tuple, Any, Dict
 
@@ -30,7 +31,16 @@ def dupe(d: Dict[int, str], dupes: int = 2) -> Dict[int, str]:
     temp = {}
     for key in d:
         for i in range(dupes):
-            temp[key + i * dupes] = d[key]
+            temp[key + i * len(d)] = d[key]
+    return temp
+
+
+def dual_dupe(d: Dict[Tuple[int, int], str], dupe_top: int = 2, dupe_bot: int = 2, top_count: int = 2, bot_count: int = 2):
+    temp = {}
+    for (tkey, bkey) in d:
+        for i in range(dupe_top):
+            for j in range(dupe_bot):
+                temp[(tkey + i * top_count, bkey + j * bot_count)] = d[(tkey, bkey)]
     return temp
 
 
@@ -72,29 +82,37 @@ def add_routes(application: FastAPI):
         (1, 1): r"/img/previews/display_adidas_shorts.jpg",
     }
 
+    _displays = dual_dupe(_displays, 12, 12, 2, 2)
+
     def add_group(path: str, items: Dict[int, Any]):
         @application.get(path)
         def group(id: int = None, img: bool = False):
-            if id:
-                path = items[id]
-                if img:
-                    return RedirectResponse(path, HTTPStatus.SEE_OTHER)
+            try:
+                if id:
+                    path = items[id]
+                    if img:
+                        return RedirectResponse(path, HTTPStatus.SEE_OTHER)
+                    else:
+                        return JSONResponse(path)
                 else:
-                    return JSONResponse(path)
-            else:
-                return JSONResponse(items)
+                    return JSONResponse(items)
+            except KeyError:
+                return Response(status_code=404)
 
     add_group("/bottoms", _bottoms)
     add_group("/tops", _tops)
 
     @application.get("/preview")
     def preview(top: int, bot: int, img: bool = True):
-        path = _displays[(top, bot)]
-        if img:
-            # I use a redirect so that images can be cached (since images are served from static
-            return RedirectResponse(path, HTTPStatus.SEE_OTHER)
-        else:
-            return JSONResponse(path)
+        try:
+            path = _displays[(top, bot)]
+            if img:
+                # I use a redirect so that images can be cached (since images are served from static
+                return RedirectResponse(path, HTTPStatus.SEE_OTHER)
+            else:
+                return JSONResponse(path)
+        except KeyError:
+            return Response(status_code=404)
 
     application.mount("/img", StaticFiles(directory="static/img"))
     application.mount("/js", StaticFiles(directory="static/js"))
