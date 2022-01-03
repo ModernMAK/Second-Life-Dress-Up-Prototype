@@ -103,3 +103,4 @@ attach_populator("#bottoms-tab", "/bottoms","/js/templates/bottoms.handlebars",
 
 //setup_buttons(".js-top-btn")
 update_preview_images()
+$("#tops-tab").click()
