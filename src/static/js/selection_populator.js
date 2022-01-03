@@ -37,6 +37,7 @@ function setup_buttons(btn_class, attr_name, id_prefix)
             var id = $(this).attr(attr_name);
             update_preview(attr_name, id);
             update_buttons(btn_class,attr_name,id_prefix);
+            return false;
         }
     );
     update_buttons(btn_class,attr_name,id_prefix);
