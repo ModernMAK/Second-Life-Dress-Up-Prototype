@@ -24,17 +24,14 @@
         </nav>
     </div>
     <div class="row container-fluid">
-        <div class="col-12 col-md-4 col-lg-3 px-0">
+        <div class="col-6 col-md-4 col-lg-3 px-0">
             <!-- This is sticky, to allow constant preview while scrolling; for large devices -->
-            <div style="width:100%; position:sticky; top:56px; height:94vh;" class="d-none d-md-block">
+            <div style="width:100%; position:sticky; top:56px; height:94vh;">
                 <img id="preview-sidebar" src="/preview?top=0&bot=0" style="object-fit:scale-down;" class="w-100 h-100">
             </div>
-            <!-- This is non-sticky for small devices -->
-            <div class="d-block d-md-none" style="height:512px;">
-                <img id="preview-collapsable" src="/preview?top=0&bot=0" style="object-fit:scale-down;" class="w-100 h-100">
-            </div>
+
         </div>
-        <div class="col-12 col-md-8 col-lg-9">
+        <div class="col-6 col-md-8 col-lg-9">
             <div class="row" id="selection-area">
             </div>
         </div>
