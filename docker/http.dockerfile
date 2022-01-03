@@ -4,8 +4,8 @@ FROM python:3.8.1-slim
 ENV PYTHONUNBUFFERED 1
 
 # Setup App
-COPY ../requirements.txt .
-COPY ../src .
+COPY ./requirements.txt .
+COPY ./src .
 RUN pip install -r requirements.txt
 
 
