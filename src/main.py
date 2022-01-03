@@ -121,6 +121,12 @@ def add_routes(application: FastAPI):
 def run():
     app = FastAPI()
     add_routes(app)
+    @app.get("/frame")
+    def iframe():
+        f_path = "static/html/frame.html"
+        with open(f_path) as handle:
+            return HTMLResponse(handle.read())
+
     uvicorn.run(app, port=80)
 
 
